@@ -28,6 +28,16 @@
 #pragma GCC system_header
 #endif
 
+#ifdef _MSC_VER
+//ask kj to implement iterator_traits
+#define KJ_STD_COMPAT
+#pragma warning(push)
+#pragma warning(disable:4244) // conversion from 'unsigned __int64' to 'capnp::uint', possible loss of data
+#pragma warning(disable:4267) // conversion from 'size_t' to 'capnp::uint', possible loss of data
+#pragma warning(disable:4800) // forcing value to bool 'true' or 'false' (performance warning)
+#endif //_MSC_VER
+
+
 #include "raw-schema.h"
 #include "layout.h"
 #include "list.h"
@@ -403,5 +413,9 @@ inline constexpr uint sizeInWords() {
       static constexpr ::capnp::_::RawSchema const* schema = &::capnp::schemas::s_##id;
 
 #endif  // CAPNP_LITE, else
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif //_MSC_VER
 
 #endif  // CAPNP_GENERATED_HEADER_SUPPORT_H_
