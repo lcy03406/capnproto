@@ -1408,7 +1408,7 @@ private:
   }
 
   Plausibility isPlausiblyJson(kj::ArrayPtr<const byte> prefix) {
-    enum { PREAMBLE, COMMENT, BODY } state;
+    enum { PREAMBLE, COMMENT, BODY } state = PREAMBLE;
 
     for (char c: prefix.asChars()) {
       switch (state) {
