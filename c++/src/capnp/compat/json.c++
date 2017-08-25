@@ -496,6 +496,9 @@ void decodeField(Type type, JsonValue::Reader value, SetFn setFn, DecodeArrayFn 
         case JsonValue::STRING:
           setFn(value.getString());
           break;
+        case JsonValue::NUMBER:
+          setFn(DynamicEnum{ type.asEnum(), (uint16_t)value.getNumber() });
+          break;
         default:
           KJ_FAIL_REQUIRE("Expected enum value");
       }
