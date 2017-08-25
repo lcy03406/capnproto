@@ -147,6 +147,8 @@ public:
                "Do not print warning messages about the input being in the wrong format.  "
                "Use this if you find the warnings are wrong (but also let us know so "
                "we can improve them).")
+           .addOption({"strict"}, KJ_BIND_METHOD(*this, setStrict),
+               "Read JSON input in strict mode. Do not allow unknown field names. ")
            .expectArg("<from>:<to>", KJ_BIND_METHOD(*this, setConversion))
            .expectOptionalArg("<schema-file>", KJ_BIND_METHOD(*this, addSource))
            .expectOptionalArg("<type>", KJ_BIND_METHOD(*this, setRootType))
@@ -1039,6 +1041,7 @@ private:
         MallocMessageBuilder message;
         JsonCodec codec;
         codec.setPrettyPrint(pretty);
+		codec.setStrictDecode(strict);
         auto root = message.initRoot<DynamicStruct>(rootType);
         codec.decode(text, root);
         return writeConversion(root.asReader(), output);
@@ -1133,6 +1136,10 @@ public:
   }
   kj::MainBuilder::Validity setQuiet() {
     quiet = true;
+    return true;
+  }
+  kj::MainBuilder::Validity setStrict() {
+    strict = true;
     return true;
   }
   kj::MainBuilder::Validity setSegmentSize(kj::StringPtr size) {
@@ -1776,6 +1783,7 @@ private:
   bool packed = false;
   bool pretty = true;
   bool quiet = false;
+  bool strict = false;
   uint segmentSize = 0;
   StructSchema rootType;
   // For the "decode" and "encode" commands.
