@@ -393,8 +393,11 @@ template <typename SetFn, typename DecodeArrayFn, typename DecodeObjectFn>
 void decodeField(Type type, JsonValue::Reader value, SetFn setFn, DecodeArrayFn decodeArrayFn,
     DecodeObjectFn decodeObjectFn) {
   // This code relies on conversions in DynamicValue::Reader::as<T>.
+  if (value.which() == JsonValue::NULL_)
+    return;
   switch(type.which()) {
     case schema::Type::VOID:
+      setFn(VOID);
       break;
     case schema::Type::BOOL:
       switch (value.which()) {
