@@ -23,6 +23,10 @@ set(INSTALL_TARGETS_DEFAULT_ARGS
   RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
 )
 
+set(INSTALL_PDB_DEFAULT_ARGS
+  DESTINATION "${CMAKE_INSTALL_BINDIR}" OPTIONAL
+)
+
 # Options ======================================================================
 
 option(BUILD_TESTING "Build unit tests and enable CTest 'check' target." ON)
