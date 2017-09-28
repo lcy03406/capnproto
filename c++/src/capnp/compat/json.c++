@@ -575,12 +575,16 @@ void JsonCodec::decode(JsonValue::Reader input, DynamicStruct::Builder output) c
   // TODO(soon): type and field handlers
   switch (input.which()) {
     case JsonValue::OBJECT:
+#if KJ_NO_EXCEPTIONS
+      decodeObject(input.getObject(), output, source);
+#else
       try {
         decodeObject(input.getObject(), output, source);
       } catch (kj::Exception e) {
         KJ_LOG(ERROR, "error when decoding JSON", source);
-		throw(e);
+        throw(e);
       }
+#endif
       break;
     default:
       KJ_FAIL_REQUIRE("Top level json value must be object");
@@ -944,13 +948,16 @@ void JsonCodec::decodeRaw(kj::ArrayPtr<const char> input, JsonValue::Builder out
   MallocMessageBuilder message(sourceArray);
   JsonValue::SourceInfo::Builder consumed = message.initRoot<JsonValue::SourceInfo>();
   Parser parser(impl->maxNestingDepth, input, consumed);
+#if KJ_NO_EXCEPTIONS
+  parser.parseValue(output);
+#else
   try {
     parser.parseValue(output);
   } catch (kj::Exception e) {
     KJ_LOG(ERROR, "error when parsing JSON", consumed);
     throw(e);
   }
-
+#endif
   KJ_REQUIRE(parser.inputExhausted(), "Input remains after parsing JSON.");
 }
 
