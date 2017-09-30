@@ -180,10 +180,11 @@ if(NOT CAPNP_LITE)
   set_target_properties(capnpc_capnp PROPERTIES OUTPUT_NAME capnpc-capnp)
 
   install(TARGETS capnp_tool capnpc_cpp capnpc_capnp ${INSTALL_TARGETS_DEFAULT_ARGS})
+if ("${CMAKE_SYSTEM_NAME}" EQUAL "Windows")
   install(FILES $<TARGET_PDB_FILE:capnp_tool> ${INSTALL_PDB_DEFAULT_ARGS})
   install(FILES $<TARGET_PDB_FILE:capnpc_cpp> ${INSTALL_PDB_DEFAULT_ARGS})
   install(FILES $<TARGET_PDB_FILE:capnpc_capnp> ${INSTALL_PDB_DEFAULT_ARGS})
-
+endif()
   # Symlink capnpc -> capnp
   install(CODE "execute_process(COMMAND \"${CMAKE_COMMAND}\" -E create_symlink capnp \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_BINDIR}/capnpc\")")
 endif()  # NOT CAPNP_LITE

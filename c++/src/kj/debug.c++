@@ -243,16 +243,6 @@ static String makeDescriptionImpl(DescriptionStyle style, const char* code, int 
     StringPtr colon = ": ";
 
     StringPtr sysErrorArray;
-#if __USE_GNU
-    char buffer[256];
-    if (style == SYSCALL) {
-      if (sysErrorString == nullptr) {
-        sysErrorArray = strerror_r(errorNumber, buffer, sizeof(buffer));
-      } else {
-        sysErrorArray = sysErrorString;
-      }
-    }
-#else
     char buffer[256];
     if (style == SYSCALL) {
       if (sysErrorString == nullptr) {
@@ -262,7 +252,6 @@ static String makeDescriptionImpl(DescriptionStyle style, const char* code, int 
         sysErrorArray = sysErrorString;
       }
     }
-#endif
 
     size_t totalSize = 0;
     switch (style) {
