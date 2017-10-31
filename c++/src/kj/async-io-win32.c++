@@ -373,6 +373,9 @@ private:
         .then([this,KJ_CPCAP(bufs),minBytes,alreadyRead](Win32IocpEventPort::IoResult result) mutable
               -> Promise<size_t> {
       if (result.errorCode != ERROR_SUCCESS) {
+        if (result.errorCode == ERROR_SEM_TIMEOUT) {
+          return tryReadInternal(bufs, minBytes, alreadyRead);
+        }
         if (alreadyRead > 0) {
           // Report what we already read.
           return alreadyRead;
