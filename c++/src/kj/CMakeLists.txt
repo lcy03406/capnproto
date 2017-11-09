@@ -60,7 +60,7 @@ set(kj-std_headers
 )
 add_library(kj ${kj_sources})
 add_library(CapnProto::kj ALIAS kj)
-target_compile_features(kj PUBLIC cxx_constexpr)
+###target_compile_features(kj PUBLIC cxx_constexpr)
 # Requiring the cxx_std_11 metafeature would be preferable, but that doesn't exist until CMake 3.8.
 
 if(UNIX AND NOT ANDROID)
@@ -155,6 +155,7 @@ endif()
 # Tests ========================================================================
 
 if(BUILD_TESTING)
+if(NOT APPLE_TYPE MATCHES iOS)
   add_executable(kj-tests
     common-test.c++
     memory-test.c++
@@ -197,4 +198,5 @@ if(BUILD_TESTING)
     add_dependencies(check kj-heavy-tests)
     add_test(NAME kj-heavy-tests-run COMMAND kj-heavy-tests)
   endif()  # NOT CAPNP_LITE
+endif()
 endif()  # BUILD_TESTING

@@ -152,6 +152,7 @@ if(NOT CAPNP_LITE)
 endif()
 
 if(NOT CAPNP_LITE)
+if(NOT APPLE_TYPE MATCHES iOS)
   add_executable(capnp_tool
     compiler/module-loader.c++
     compiler/capnp.c++
@@ -187,11 +188,13 @@ if ("${CMAKE_SYSTEM_NAME}" EQUAL "Windows")
 endif()
   # Symlink capnpc -> capnp
   install(CODE "execute_process(COMMAND \"${CMAKE_COMMAND}\" -E create_symlink capnp \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_BINDIR}/capnpc\")")
+endif()
 endif()  # NOT CAPNP_LITE
 
 # Tests ========================================================================
 
 if(BUILD_TESTING)
+if(NOT APPLE_TYPE MATCHES iOS)
   set(test_capnp_files
     test.capnp
     test-import.capnp
@@ -270,4 +273,5 @@ if(BUILD_TESTING)
     add_dependencies(check capnp-evolution-tests)
     add_test(NAME capnp-evolution-tests-run COMMAND capnp-evolution-tests)
   endif()  # NOT CAPNP_LITE
+endif()
 endif()  # BUILD_TESTING

@@ -1,6 +1,7 @@
 project("Capnproto" CXX)
 cmake_minimum_required(VERSION 3.1)
 set(VERSION 0.7-dev)
+set(target "Capnproto")
 
 message("CMAKE_GENERATOR=${CMAKE_GENERATOR}.")
 message("CMAKE_SYSTEM_NAME=${CMAKE_SYSTEM_NAME}.")
@@ -9,13 +10,17 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(CheckIncludeFileCXX)
 include(GNUInstallDirs)
+
+if(NOT APPLE_TYPE MATCHES iOS)
 if(MSVC)
   check_include_file_cxx(initializer_list HAS_CXX11)
 else()
-  check_include_file_cxx(initializer_list HAS_CXX11 "-std=gnu++0x")
+  check_include_file_cxx(initializer_list HAS_CXX11 "-std=c++11")
 endif()
+message("target: "${target})
 if(NOT HAS_CXX11)
   message(SEND_ERROR "Requires a C++11 compiler and standard library.")
+endif()
 endif()
 
 # these arguments are passed to all install(TARGETS) calls
