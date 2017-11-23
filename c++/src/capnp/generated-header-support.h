@@ -35,6 +35,7 @@
 #pragma warning(disable:4244) // conversion from 'unsigned __int64' to 'capnp::uint', possible loss of data
 #pragma warning(disable:4267) // conversion from 'size_t' to 'capnp::uint', possible loss of data
 #pragma warning(disable:4800) // forcing value to bool 'true' or 'false' (performance warning)
+#pragma warning(disable:4521) // 'kj::ExceptionCallback' : multiple copy constructors specified
 #endif //_MSC_VER
 
 
