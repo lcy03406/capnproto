@@ -30,6 +30,16 @@
 #error "RPC APIs, including this header, are not available in lite mode."
 #endif
 
+#ifdef _MSC_VER
+//ask kj to implement iterator_traits
+#define KJ_STD_COMPAT
+#pragma warning(push)
+#pragma warning(disable:4244) // conversion from 'unsigned __int64' to 'capnp::uint', possible loss of data
+#pragma warning(disable:4267) // conversion from 'size_t' to 'capnp::uint', possible loss of data
+#pragma warning(disable:4800) // forcing value to bool 'true' or 'false' (performance warning)
+#pragma warning(disable:4521) // 'kj::ExceptionCallback' : multiple copy constructors specified
+#endif //_MSC_VER
+
 #include <kj/async.h>
 #include <kj/vector.h>
 #include "raw-schema.h"
@@ -880,5 +890,9 @@ struct Orphanage::GetInnerReader<T, Kind::INTERFACE> {
 };
 
 }  // namespace capnp
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif //_MSC_VER
 
 #endif  // CAPNP_CAPABILITY_H_
