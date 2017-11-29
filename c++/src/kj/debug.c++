@@ -352,7 +352,7 @@ void Debug::Fault::init(
                                 FORMAT_MESSAGE_FROM_SYSTEM |
                                 FORMAT_MESSAGE_IGNORE_INSERTS,
                                 NULL, osErrorNumber.number,
-                                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                                MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
                                 (LPTSTR) &ptr, 0, NULL);
 
   if (result > 0) {
