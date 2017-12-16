@@ -53,9 +53,11 @@ namespace {
 
 void setNonblocking(int fd) {
 #ifdef FIONBIO
+  KJ_DBG("setNonblocking FIONBIO", fd);
   int opt = 1;
   KJ_SYSCALL(ioctl(fd, FIONBIO, &opt));
 #else
+  KJ_DBG("setNonblocking O_NONBLOCK", fd);
   int flags;
   KJ_SYSCALL(flags = fcntl(fd, F_GETFL));
   if ((flags & O_NONBLOCK) == 0) {
@@ -1095,8 +1097,10 @@ public:
     // Unfortunately connect() doesn't fit the mold of KJ_NONBLOCKING_SYSCALL, since it indicates
     // non-blocking using EINPROGRESS.
     for (;;) {
+	  KJ_DBG("wrapConnectingSocketFd", "connect");
       if (::connect(fd, addr, addrlen) < 0) {
         int error = errno;
+		KJ_DBG("wrapConnectingSocketFd", "connect", error);
         if (error == EINPROGRESS) {
           // Fine.
           break;
@@ -1105,6 +1109,7 @@ public:
           return Own<AsyncIoStream>();
         }
       } else {
+        KJ_DBG("wrapConnectingSocketFd", "connect ok");
         // no error
         break;
       }
@@ -1116,7 +1121,9 @@ public:
     return connected.then(kj::mvCapture(result, [fd](Own<AsyncIoStream>&& stream) {
       int err;
       socklen_t errlen = sizeof(err);
+	  KJ_DBG("wrapConnectingSocketFd", "getsockopt");
       KJ_SYSCALL(getsockopt(fd, SOL_SOCKET, SO_ERROR, &err, &errlen));
+	  KJ_DBG("wrapConnectingSocketFd", "getsockopt", err);
       if (err != 0) {
         KJ_FAIL_SYSCALL("connect()", err) { break; }
       }

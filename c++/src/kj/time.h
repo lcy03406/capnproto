@@ -61,6 +61,18 @@ using Date = Absolute<Duration, _::DateLabel>;
 constexpr Date UNIX_EPOCH = origin<Date>();
 // The `Date` representing Jan 1, 1970 00:00:00 UTC.
 
+inline auto KJ_STRINGIFY(const Duration& time)
+-> decltype(kj::toCharSequence(time.raw()))
+{
+	return kj::toCharSequence(time.raw());
+}
+
+inline auto KJ_STRINGIFY(const TimePoint& time)
+-> decltype(kj::toCharSequence(time.raw()))
+{
+	return kj::toCharSequence(time.raw());
+}
+
 class Clock {
   // Interface to read the current date and time.
 public:

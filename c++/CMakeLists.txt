@@ -17,7 +17,7 @@ if(MSVC)
 else()
   check_include_file_cxx(initializer_list HAS_CXX11 "-std=c++11")
 endif()
-message("target: "${target})
+message("target: " ${target})
 if(NOT HAS_CXX11)
   message(SEND_ERROR "Requires a C++11 compiler and standard library.")
 endif()
@@ -75,7 +75,7 @@ else()
   #   recognize as safe.
   # * sign-compare: Low S/N ratio.
   # * unused-parameter: Low S/N ratio.
-  add_compile_options(-Wall -Wextra -Wno-strict-aliasing -Wno-sign-compare -Wno-unused-parameter -Wno-c++11-narrowing -std=c++11 -pthread)
+  add_compile_options(-Wall -Wextra -Wno-strict-aliasing -Wno-sign-compare -Wno-unused-parameter -Wno-c++11-narrowing -std=c++11 -pthread -fexceptions)
 
   if(DEFINED CMAKE_CXX_EXTENSIONS AND NOT CMAKE_CXX_EXTENSIONS)
     message(SEND_ERROR "Cap'n Proto requires compiler-specific extensions (e.g., -std=gnu++11). Please leave CMAKE_CXX_EXTENSIONS undefined or ON.")

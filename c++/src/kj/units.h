@@ -367,6 +367,7 @@ public:
     return *this;
   }
 
+  inline constexpr Number raw() const { return value; }
 private:
   Number value;
 
@@ -438,6 +439,7 @@ public:
   inline constexpr bool operator< (const Absolute& other) const { return value <  other.value; }
   inline constexpr bool operator> (const Absolute& other) const { return value >  other.value; }
 
+  inline constexpr T raw() const { return value; }
 private:
   T value;
 

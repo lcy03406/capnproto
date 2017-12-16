@@ -158,11 +158,13 @@ Own<Win32EventPort::SignalObserver> Win32IocpEventPort::observeSignalState(HANDL
 }
 
 TimePoint Win32IocpEventPort::readClock() {
-  return origin<TimePoint>() + std::chrono::duration_cast<std::chrono::nanoseconds>(
-      std::chrono::steady_clock::now().time_since_epoch()).count() * NANOSECONDS;
+  auto nano = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+  KJ_DBG("Win32IocpEventPort::readClock", nano);
+  return origin<TimePoint>() + nano * NANOSECONDS;
 }
 
 bool Win32IocpEventPort::wait() {
+  KJ_DBG("Win32IocpEventPort::wait");
   waitIocp(timerImpl.timeoutToNextEvent(readClock(), MILLISECONDS, INFINITE - 1)
       .map([](uint64_t t) -> DWORD { return t; })
       .orDefault(INFINITE));
@@ -173,6 +175,7 @@ bool Win32IocpEventPort::wait() {
 }
 
 bool Win32IocpEventPort::poll() {
+  KJ_DBG("Win32IocpEventPort::poll");
   waitIocp(0);
 
   return receivedWake();

@@ -102,6 +102,7 @@ Maybe<TimePoint> TimerImpl::nextEvent() {
 }
 
 Maybe<uint64_t> TimerImpl::timeoutToNextEvent(TimePoint start, Duration unit, uint64_t max) {
+  KJ_DBG("TimerImpl::timeoutToNextEvent", time, start, unit);
   return nextEvent().map([&](TimePoint nextTime) -> uint64_t {
     if (nextTime <= start) return 0;
 
@@ -120,6 +121,7 @@ Maybe<uint64_t> TimerImpl::timeoutToNextEvent(TimePoint start, Duration unit, ui
 
 void TimerImpl::advanceTo(TimePoint newTime) {
   KJ_REQUIRE(newTime >= time, "can't advance backwards in time") { return; }
+  KJ_DBG("TimerImpl::advanceTo", time, newTime);
 
   time = newTime;
   for (;;) {
