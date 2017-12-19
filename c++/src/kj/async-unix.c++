@@ -49,7 +49,6 @@ namespace kj {
 
 TimePoint UnixEventPort::readClock() {
   auto nano = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
-  KJ_DBG("UnixEventPort::readClock", nano);
   return origin<TimePoint>() + nano * NANOSECONDS;
 }
 
@@ -395,7 +394,6 @@ Promise<void> UnixEventPort::FdObserver::whenUrgentDataAvailable() {
 }
 
 bool UnixEventPort::wait() {
-  KJ_DBG("UnixEventPort::wait", "epoll");
   return doEpollWait(
       timerImpl.timeoutToNextEvent(readClock(), MILLISECONDS, int(maxValue))
           .map([](uint64_t t) -> int { return t; })
@@ -403,7 +401,6 @@ bool UnixEventPort::wait() {
 }
 
 bool UnixEventPort::poll() {
-  KJ_DBG("UnixEventPort::poll", "epoll");
   return doEpollWait(0);
 }
 
@@ -759,7 +756,6 @@ private:
 };
 
 bool UnixEventPort::wait() {
-  KJ_DBG("UnixEventPort::wait", "sig");
   sigset_t newMask;
   sigemptyset(&newMask);
   sigaddset(&newMask, reservedSignal);
@@ -813,7 +809,6 @@ bool UnixEventPort::wait() {
 }
 
 bool UnixEventPort::poll() {
-  KJ_DBG("UnixEventPort::poll", "sig");
   // volatile so that longjmp() doesn't clobber it.
   volatile bool woken = false;
 
